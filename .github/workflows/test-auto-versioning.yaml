@@ -34,7 +34,9 @@ jobs:
         run: git fetch --tags
 
       - name: Check if new tag is '1'
-        run: test ${INCREMENTED_BUILD_VERSION} = '1'
+        run: |
+          test ${INCREMENTED_BUILD_VERSION} = '1'
+          test $(git tag --points-at HEAD) = '1'
 
 
   test_case_2:
@@ -42,14 +44,20 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: write
+    needs: test_case_1
     steps:
       - name: Checkout repo
         uses: actions/checkout@v2
         with:
           fetch-depth: 0
 
-      - name: Set tag to '5'
-        run: git tag '5'
+      - name: Remove all tags
+        run: git tag | xargs git tag -d
+
+      - name: Push test tag '5'
+        run: |
+          git tag '5'
+          git push https://${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }} --tags
 
       - name: Increment Version
         id: increment_version
@@ -65,4 +73,6 @@ jobs:
         run: git fetch --tags
 
       - name: Check if new tag is '6'
-        run: test ${INCREMENTED_BUILD_VERSION} = '6'
+        run: |
+          test ${INCREMENTED_BUILD_VERSION} = '6'
+          test $(git tag --points-at HEAD) = '6'
