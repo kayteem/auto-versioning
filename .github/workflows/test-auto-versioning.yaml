@@ -3,7 +3,7 @@ name: Auto Versioning Test Suite
 on:
   push:
     paths:
-      - 'action.yml'
+      - 'action.yaml'
 
 jobs:
   test_case_1:
