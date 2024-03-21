@@ -26,13 +26,16 @@ jobs:
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
 
+      - name: Retrieve new versions
+        run: |
+          INCREMENTED_BUILD_VERSION=${{ steps.increment_version.outputs.build-version }}
+
       - name: Fetch all tags again
         run: git fetch --tags
 
       - name: Check if new tag is '1'
-        run: test ${NEW_VERSION} = '1'
-        env:
-          NEW_VERSION: ${{ steps.increment_version.outputs.build_version }}
+        run: test ${INCREMENTED_BUILD_VERSION} = '1'
+
 
   test_case_2:
     name: Test action on a repo with an initial tag
@@ -54,10 +57,12 @@ jobs:
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
 
+      - name: Retrieve new versions
+        run: |
+          INCREMENTED_BUILD_VERSION=${{ steps.increment_version.outputs.build-version }}
+
       - name: Fetch all tags again
         run: git fetch --tags
 
       - name: Check if new tag is '6'
-        run: test ${NEW_VERSION} = '6'
-        env:
-          NEW_VERSION: ${{ steps.increment_version.outputs.build_version }}
+        run: test ${INCREMENTED_BUILD_VERSION} = '6'

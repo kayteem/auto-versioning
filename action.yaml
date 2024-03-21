@@ -23,14 +23,19 @@ runs:
         # Fetch tags
         git fetch --tags
 
-        # Retrieve latest tag, ignore errors in case no tags were found
-        CURRENT_TAG=$(git describe --tags `git rev-list --tags --max-count=1` 2>/dev/null)
+        # The git rev-list command prints commit hashes from newest to oldest
+        # The --tags option restricts the listing to just tag references
+        # So this command yields the commit hash of the latest tagged commit in the repository
+        # If no tags exist, this command produces no output, and LATEST_TAG will be an empty string
+        LATEST_TAG_HASH="$(git rev-list --tags --max-count=1)"
         
         # If no tag exists, start from 1, else increment
-        if [ -z "$CURRENT_TAG" ]; then
-            NEW_TAG=1
+        if [ -z "$LATEST_TAG_HASH" ]; then
+          NEW_TAG=1
         else
-            NEW_TAG=$((CURRENT_TAG + 1))
+          # Get tag name
+          CURRENT_TAG=$(git describe --tags "`echo $LATEST_TAG_HASH`" 2>/dev/null)
+          NEW_TAG=$((CURRENT_TAG + 1))
         fi
         
         # Set new tag
