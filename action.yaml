@@ -37,6 +37,6 @@ runs:
         git tag $NEW_TAG
         
         # Push new tag to remote
-        git push https://${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }} --tags
+        git push https://${{ inputs.token }}@github.com/${{ github.repository }} --tags
         
         echo "::set-output name=build_version::${NEW_TAG}"
