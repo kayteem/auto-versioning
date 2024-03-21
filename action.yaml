@@ -1,0 +1,42 @@
+name: 'Increment Version'
+description: 'automatically bumps the version for each software module'
+
+#inputs:
+#  token:
+#    description: 'GITHUB_TOKEN required to create or delete version numbers'
+#    required: true # required only when generating the initial build-version
+
+outputs:
+  build-version:
+    description: "the incremented BUILD version number"
+    value: ${{ steps.increment_build_version.outputs.build_version }}
+#  module-prefix:
+#    description: 'prefix for the build-number tag (required when versioning multiple modules)'
+
+runs:
+  using: "composite"
+  steps:
+    - name: increment BUILD version and push tag
+      id: increment_build_version
+      shell: bash
+      run: |
+        # Fetch tags
+        git fetch --tags
+
+        # Retrieve latest tag
+        CURRENT_TAG=$(git describe --tags `git rev-list --tags --max-count=1`)
+        
+        # If no tag exists, start from 1, else increment
+        if [ -z "$CURRENT_TAG" ]; then
+            NEW_TAG=1
+        else
+            NEW_TAG=$((CURRENT_TAG + 1))
+        fi
+        
+        # Set new tag
+        git tag $NEW_TAG
+        
+        # Push new tag to remote
+        git push https://${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }} --tags
+        
+        echo "::set-output name=build_version::${NEW_TAG}"
