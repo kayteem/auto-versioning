@@ -19,8 +19,11 @@ jobs:
 
       - name: Remove all tags
         run: |
-          git tag | xargs -I @ git tag -d @
-          git tag | xargs -I @ git push origin :@
+          # Delete all local tags
+          git fetch --tags
+          git tag -l | xargs git tag -d
+          # Fetch the list of remote tags and then push a command to delete each of them on the remote repository
+          git push origin $(git ls-remote --tags origin | awk '{print ":" $2}')
 
       - name: Increment Version
         id: increment_version
@@ -55,8 +58,11 @@ jobs:
 
       - name: Remove all tags
         run: |
-          git tag | xargs -I @ git tag -d @
-          git tag | xargs -I @ git push origin :@
+          # Delete all local tags
+          git fetch --tags
+          git tag -l | xargs git tag -d
+          # Fetch the list of remote tags and then push a command to delete each of them on the remote repository
+          git push origin $(git ls-remote --tags origin | awk '{print ":" $2}')
 
       - name: Push test tag '5'
         run: |

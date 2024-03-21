@@ -40,7 +40,6 @@ runs:
         
         # Set new tag and push
         git tag $NEW_TAG
-        
         git push https://${{ inputs.token }}@github.com/${{ github.repository }} --tags
         
         echo "::set-output name=build_version::${NEW_TAG}"
