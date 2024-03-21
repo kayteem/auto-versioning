@@ -30,9 +30,10 @@ jobs:
 
       - name: Check if new tag is '1'
         run: |
-          INCREMENTED_BUILD_VERSION=${{ steps.increment_version.outputs.build-version }}
-          test ${INCREMENTED_BUILD_VERSION} = '1'
+          ACTION_OUTPUT=${{ steps.increment_version.outputs.build-version }}
+          test ${ACTION_OUTPUT} = '1'
           git fetch --tags
+          echo "Tags pointing at HEAD: $(git tag --points-at HEAD)"
           test $(git tag --points-at HEAD) = '1'
 
 
@@ -69,7 +70,8 @@ jobs:
 
       - name: Check if new tag is '6'
         run: |
-          INCREMENTED_BUILD_VERSION=${{ steps.increment_version.outputs.build-version }}
-          test ${INCREMENTED_BUILD_VERSION} = '6'
+          ACTION_OUTPUT=${{ steps.increment_version.outputs.build-version }}
+          test ${ACTION_OUTPUT} = '6'
           git fetch --tags
+          echo "Tags pointing at HEAD: $(git tag --points-at HEAD)"
           test $(git tag --points-at HEAD) = '6'
