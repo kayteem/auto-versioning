@@ -29,13 +29,18 @@ runs:
         # If no tags exist, this command produces no output, and LATEST_TAG will be an empty string
         LATEST_TAG_HASH="$(git rev-list --tags --max-count=1)"
         
-        # If no tag exists, start from 1, else increment
+        # If no tag exists, start from 1
         if [ -z "$LATEST_TAG_HASH" ]; then
           NEW_TAG=1
+        
         else
           # Get tag name
           CURRENT_TAG=$(git describe --tags "`echo $LATEST_TAG_HASH`" 2>/dev/null)
           NEW_TAG=$((CURRENT_TAG + 1))
+          
+          # Delete old tag
+          git tag -d $CURRENT_TAG
+          git push --delete origin $CURRENT_TAG
         fi
         
         # Set new tag and push
