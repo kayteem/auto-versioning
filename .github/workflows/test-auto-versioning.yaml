@@ -9,6 +9,8 @@ jobs:
   test_case_1:
     name: Test action on a fresh repo with no existing tags
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
     steps:
       - name: Checkout repo and remove all tags
         uses: actions/checkout@v2
@@ -35,6 +37,8 @@ jobs:
   test_case_2:
     name: Test action on a repo with an initial tag
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
     steps:
       - name: Checkout repo
         uses: actions/checkout@v2

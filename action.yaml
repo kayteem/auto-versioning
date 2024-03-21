@@ -23,8 +23,8 @@ runs:
         # Fetch tags
         git fetch --tags
 
-        # Retrieve latest tag
-        CURRENT_TAG=$(git describe --tags `git rev-list --tags --max-count=1`)
+        # Retrieve latest tag, ignore errors in case no tags were found
+        CURRENT_TAG=$(git describe --tags `git rev-list --tags --max-count=1` 2>/dev/null)
         
         # If no tag exists, start from 1, else increment
         if [ -z "$CURRENT_TAG" ]; then
