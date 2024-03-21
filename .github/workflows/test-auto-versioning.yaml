@@ -1,9 +1,6 @@
 name: Auto Versioning Test Suite
 
-on:
-  push:
-    paths:
-      - 'action.yaml'
+on: push
 
 jobs:
   test_case_1:
@@ -12,7 +9,7 @@ jobs:
     permissions:
       contents: write
     steps:
-      - name: Checkout repo and remove all tags
+      - name: Checkout repo
         uses: actions/checkout@v2
         with:
           fetch-depth: 0
@@ -31,16 +28,11 @@ jobs:
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Retrieve new versions
-        run: |
-          INCREMENTED_BUILD_VERSION=${{ steps.increment_version.outputs.build-version }}
-
-      - name: Fetch all tags again
-        run: git fetch --tags
-
       - name: Check if new tag is '1'
         run: |
+          INCREMENTED_BUILD_VERSION=${{ steps.increment_version.outputs.build-version }}
           test ${INCREMENTED_BUILD_VERSION} = '1'
+          git fetch --tags
           test $(git tag --points-at HEAD) = '1'
 
 
@@ -75,14 +67,9 @@ jobs:
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Retrieve new versions
-        run: |
-          INCREMENTED_BUILD_VERSION=${{ steps.increment_version.outputs.build-version }}
-
-      - name: Fetch all tags again
-        run: git fetch --tags
-
       - name: Check if new tag is '6'
         run: |
+          INCREMENTED_BUILD_VERSION=${{ steps.increment_version.outputs.build-version }}
           test ${INCREMENTED_BUILD_VERSION} = '6'
+          git fetch --tags
           test $(git tag --points-at HEAD) = '6'
