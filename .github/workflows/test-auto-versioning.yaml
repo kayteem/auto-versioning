@@ -33,7 +33,6 @@ jobs:
           ACTION_OUTPUT=${{ steps.increment_version.outputs.build-version }}
           test ${ACTION_OUTPUT} = '1'
           git fetch --tags
-          echo "Tags pointing at HEAD: $(git tag --points-at HEAD)"
           test $(git tag --points-at HEAD) = '1'
 
 
@@ -73,5 +72,4 @@ jobs:
           ACTION_OUTPUT=${{ steps.increment_version.outputs.build-version }}
           test ${ACTION_OUTPUT} = '6'
           git fetch --tags
-          echo "Tags pointing at HEAD: $(git tag --points-at HEAD)"
           test $(git tag --points-at HEAD) = '6'
