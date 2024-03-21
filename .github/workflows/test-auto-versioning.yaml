@@ -18,7 +18,9 @@ jobs:
           fetch-depth: 0
 
       - name: Remove all tags
-        run: git tag | xargs git tag -d
+        run: |
+          git tag | xargs -I @ git tag -d @
+          git tag | xargs -I @ git push origin :@
 
       - name: Increment Version
         id: increment_version
@@ -52,7 +54,9 @@ jobs:
           fetch-depth: 0
 
       - name: Remove all tags
-        run: git tag | xargs git tag -d
+        run: |
+          git tag | xargs -I @ git tag -d @
+          git tag | xargs -I @ git push origin :@
 
       - name: Push test tag '5'
         run: |
