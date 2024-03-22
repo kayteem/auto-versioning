@@ -52,6 +52,7 @@ runs:
           # Increment the MINOR version, if the commit message contains "MINOR
           if [[ "$COMMIT_MESSAGE" == *"MINOR"* ]]; then
             MINOR=$((MINOR + 1))
+          fi
         
           # Form new tag
           NEW_TAG="${MAJOR}.${MINOR}.${BUILD}"
