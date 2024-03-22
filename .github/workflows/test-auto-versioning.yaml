@@ -24,10 +24,10 @@ jobs:
 
       - name: Commit changes with 'BACKEND' in the message
         run: |
-          echo "." >> build.txt
           git config --local user.email "test@github.com"
           git config --local user.name "GitHub Actions"
           git pull https://${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }} --rebase
+          echo "." >> build.txt
           git add .
           git commit -m "Test Commit for BACKEND initial version"
           git push https://${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}
@@ -73,10 +73,10 @@ jobs:
 
       - name: Commit changes with 'FRONTEND' in the message
         run: |
-          echo "." >> build.txt
           git config --local user.email "test@github.com"
           git config --local user.name "GitHub Actions"
           git pull https://${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }} --rebase
+          echo "." >> build.txt
           git add .
           git commit -m "Test Commit for FRONTEND build version increment"
           git push https://${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}
@@ -122,10 +122,10 @@ jobs:
 
       - name: Commit changes with 'MINOR' in the message
         run: |
-          echo "." >> minor.txt
           git config --local user.email "test@github.com"
           git config --local user.name "GitHub Actions"
           git pull https://${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }} --rebase
+          echo "." >> minor.txt
           git add .
           git commit -m "Test Commit for MINOR MOBILE version increment"
           git push https://${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}
@@ -171,10 +171,10 @@ jobs:
 
       - name: Commit changes with 'MAJOR' in the message
         run: |
-          echo "." >> major.txt
           git config --local user.email "test@github.com"
           git config --local user.name "GitHub Actions"
           git pull https://${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }} --rebase
+          echo "." >> major.txt
           git add .
           git commit -m "Test Commit for MAJOR MOBILE version increment"
           git push https://${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}
@@ -220,10 +220,10 @@ jobs:
 
       - name: Commit changes without any software module keyword
         run: |
-          echo "." >> build.txt
           git config --local user.email "test@github.com"
           git config --local user.name "GitHub Actions"
           git pull https://${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }} --rebase
+          echo "." >> build.txt
           git add .
           git commit -m "Test Commit for no increment being required"
           git push https://${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}
