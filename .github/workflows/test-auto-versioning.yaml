@@ -73,3 +73,51 @@ jobs:
           test ${ACTION_OUTPUT} = '1.3.140'
           git fetch --tags
           test $(git tag --points-at HEAD) = '1.3.140'
+
+
+  test_case_3:
+    name: minor version is incremented if the commit message contains MINOR
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    needs: test_case_2
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+
+      - name: Remove all tags
+        run: |
+          # Delete all local tags
+          git fetch --tags
+          git tag -l | xargs git tag -d
+          # Fetch the list of remote tags and then push a command to delete each of them on the remote repository
+          git push origin $(git ls-remote --tags origin | awk '{print ":" $2}')
+
+      - name: Push test tag '1.3.139'
+        run: |
+          git tag '1.3.139'
+          git push https://${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }} --tags
+
+      - name: Commit changes with 'MINOR' in the message
+        run: |
+          echo "Test Commit for minor version increment" > minor.txt
+          git config --local user.email "test@github.com"
+          git config --local user.name "GitHub Actions"
+          git add .
+          git commit -m "Test Commit for MINOR version increment"
+          git push https://${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}
+
+      - name: Increment Version
+        id: increment_version
+        uses: ./
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Check if new tag is '1.4.140'
+        run: |
+          ACTION_OUTPUT=${{ steps.increment_version.outputs.build-version }}
+          test ${ACTION_OUTPUT} = '1.4.140'
+          git fetch --tags
+          test $(git tag --points-at HEAD) = '1.4.140'
