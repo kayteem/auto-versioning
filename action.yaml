@@ -31,12 +31,23 @@ runs:
         
         # If no tag exists, start from 1
         if [ -z "$LATEST_TAG_HASH" ]; then
-          NEW_TAG=1
+          NEW_TAG="0.0.1"
         
         else
           # Get tag name
           CURRENT_TAG=$(git describe --tags "`echo $LATEST_TAG_HASH`" 2>/dev/null)
-          NEW_TAG=$((CURRENT_TAG + 1))
+        
+          # Split tag using IFS (internal field separator)
+          IFS='.' read -ra ADDR <<< "$CURRENT_TAG"
+          MAJOR=${ADDR[0]}
+          MINOR=${ADDR[1]}
+          BUILD=${ADDR[2]}
+        
+          # Increment the BUILD version
+          NEW_BUILD=$((BUILD + 1))
+        
+          # Form new tag
+          NEW_TAG="${MAJOR}.${MINOR}.${NEW_BUILD}"
           
           # Delete old tag
           git tag -d $CURRENT_TAG
