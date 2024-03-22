@@ -57,6 +57,7 @@ runs:
           # Increment the MAJOR version and reset the MINOR version, if the commit message contains "MAJOR"
           if [[ "$COMMIT_MESSAGE" == *"MAJOR"* ]]; then
             MAJOR=$((MAJOR + 1))
+            MINOR=0
           fi
         
           # Form new tag
