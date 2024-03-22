@@ -22,7 +22,7 @@ runs:
         # Get the commit message of the last commit
         COMMIT_MESSAGE=$(git log --format=%B -n 1)
         
-        # Determine the prefix based on the commit message
+        # Determine the module-prefix, based on the commit message
         if [[ "$COMMIT_MESSAGE" == *"BACKEND"* ]]; then
           PREFIX="BACKEND-"
         elif [[ "$COMMIT_MESSAGE" == *"FRONTEND"* ]]; then
@@ -39,8 +39,8 @@ runs:
         git fetch --tags
 
         # The git rev-list command prints commit hashes from newest to oldest
-        # The --tags option restricts the listing to just tag references
-        # So this command yields the commit hash of the latest tagged commit in the repository
+        # The --tags option restricts the listing to just tag references with a given prefix
+        # This command yields the commit hash of the latest tagged commit in the repository
         # If no tags exist, this command produces no output, and LATEST_TAG will be an empty string
         LATEST_TAG_HASH="$(git rev-list --tags=$PREFIX* --max-count=1)"
         
