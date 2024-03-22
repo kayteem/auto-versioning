@@ -14,7 +14,7 @@ outputs:
 runs:
   using: "composite"
   steps:
-    - name: increment BUILD version and push tag
+    - name: increment version and push tag
       id: increment_version
       shell: bash
       run: |
@@ -31,7 +31,7 @@ runs:
           PREFIX="MOBILE-"
         else
           echo "Version not incremented, since the commit does not affect any software module."
-          echo "build_version=''" >> $GITHUB_OUTPUT
+          echo "version=''" >> $GITHUB_OUTPUT
           exit 0
         fi
         
@@ -84,4 +84,4 @@ runs:
         git tag $NEW_TAG
         git push https://${{ inputs.token }}@github.com/${{ github.repository }} --tags
         
-        echo "build_version=${NEW_TAG}" >> $GITHUB_OUTPUT
+        echo "version=${NEW_TAG}" >> $GITHUB_OUTPUT
