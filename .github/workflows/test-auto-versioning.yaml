@@ -4,7 +4,7 @@ on: push
 
 jobs:
   test_case_1:
-    name: Test action on a fresh repo with no existing tags
+    name: initial version tag is created if no tags exist
     runs-on: ubuntu-latest
     permissions:
       contents: write
@@ -28,16 +28,16 @@ jobs:
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Check if new tag is '1'
+      - name: Check if new tag is '0.0.1'
         run: |
           ACTION_OUTPUT=${{ steps.increment_version.outputs.build-version }}
-          test ${ACTION_OUTPUT} = '1'
+          test ${ACTION_OUTPUT} = '0.0.1'
           git fetch --tags
-          test $(git tag --points-at HEAD) = '1'
+          test $(git tag --points-at HEAD) = '0.0.1'
 
 
   test_case_2:
-    name: Test action on a repo with an initial tag
+    name: build version is incremented if a tag was found
     runs-on: ubuntu-latest
     permissions:
       contents: write
@@ -56,9 +56,9 @@ jobs:
           # Fetch the list of remote tags and then push a command to delete each of them on the remote repository
           git push origin $(git ls-remote --tags origin | awk '{print ":" $2}')
 
-      - name: Push test tag '5'
+      - name: Push test tag '1.3.139'
         run: |
-          git tag '5'
+          git tag '1.3.139'
           git push https://${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }} --tags
 
       - name: Increment Version
@@ -67,9 +67,9 @@ jobs:
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Check if new tag is '6'
+      - name: Check if new tag is '1.3.140'
         run: |
           ACTION_OUTPUT=${{ steps.increment_version.outputs.build-version }}
-          test ${ACTION_OUTPUT} = '6'
+          test ${ACTION_OUTPUT} = '1.3.140'
           git fetch --tags
-          test $(git tag --points-at HEAD) = '6'
+          test $(git tag --points-at HEAD) = '1.3.140'
