@@ -22,18 +22,28 @@ jobs:
           # Fetch the list of remote tags and then push a command to delete each of them on the remote repository
           git push origin $(git ls-remote --tags origin | awk '{print ":" $2}')
 
+      - name: Commit changes with 'BACKEND' in the message
+        run: |
+          echo "." >> build.txt
+          git config --local user.email "test@github.com"
+          git config --local user.name "GitHub Actions"
+          git add .
+          git commit -m "Test Commit for BACKEND initial version"
+          git pull https://${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }} --rebase
+          git push https://${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}
+
       - name: Increment Version
         id: increment_version
         uses: ./
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Check if new tag is '0.0.1'
+      - name: Check if new tag is 'BACKEND-0.0.1'
         run: |
           ACTION_OUTPUT=${{ steps.increment_version.outputs.build-version }}
-          test ${ACTION_OUTPUT} = '0.0.1'
+          test ${ACTION_OUTPUT} = 'BACKEND-0.0.1'
           git fetch --tags
-          test $(git tag --points-at HEAD) = '0.0.1'
+          test $(git tag --points-at HEAD) = 'BACKEND-0.0.1'
 
 
   test_case_2:
@@ -56,10 +66,20 @@ jobs:
           # Fetch the list of remote tags and then push a command to delete each of them on the remote repository
           git push origin $(git ls-remote --tags origin | awk '{print ":" $2}')
 
-      - name: Push test tag '1.3.139'
+      - name: Push test tag 'FRONTEND-1.3.139'
         run: |
-          git tag '1.3.139'
+          git tag 'FRONTEND-1.3.139'
           git push https://${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }} --tags
+
+      - name: Commit changes with 'FRONTEND' in the message
+        run: |
+          echo "." >> build.txt
+          git config --local user.email "test@github.com"
+          git config --local user.name "GitHub Actions"
+          git add .
+          git commit -m "Test Commit for FRONTEND build version increment"
+          git pull https://${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }} --rebase
+          git push https://${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}
 
       - name: Increment Version
         id: increment_version
@@ -67,12 +87,12 @@ jobs:
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Check if new tag is '1.3.140'
+      - name: Check if new tag is 'FRONTEND-1.3.140'
         run: |
           ACTION_OUTPUT=${{ steps.increment_version.outputs.build-version }}
-          test ${ACTION_OUTPUT} = '1.3.140'
+          test ${ACTION_OUTPUT} = 'FRONTEND-1.3.140'
           git fetch --tags
-          test $(git tag --points-at HEAD) = '1.3.140'
+          test $(git tag --points-at HEAD) = 'FRONTEND-1.3.140'
 
 
   test_case_3:
@@ -95,9 +115,9 @@ jobs:
           # Fetch the list of remote tags and then push a command to delete each of them on the remote repository
           git push origin $(git ls-remote --tags origin | awk '{print ":" $2}')
 
-      - name: Push test tag '1.3.139'
+      - name: Push test tag 'MOBILE-1.3.139'
         run: |
-          git tag '1.3.139'
+          git tag 'MOBILE-1.3.139'
           git push https://${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }} --tags
 
       - name: Commit changes with 'MINOR' in the message
@@ -106,7 +126,7 @@ jobs:
           git config --local user.email "test@github.com"
           git config --local user.name "GitHub Actions"
           git add .
-          git commit -m "Test Commit for MINOR version increment"
+          git commit -m "Test Commit for MINOR MOBILE version increment"
           git pull https://${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }} --rebase
           git push https://${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}
 
@@ -116,12 +136,12 @@ jobs:
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Check if new tag is '1.4.140'
+      - name: Check if new tag is 'MOBILE-1.4.140'
         run: |
           ACTION_OUTPUT=${{ steps.increment_version.outputs.build-version }}
-          test ${ACTION_OUTPUT} = '1.4.140'
+          test ${ACTION_OUTPUT} = 'MOBILE-1.4.140'
           git fetch --tags
-          test $(git tag --points-at HEAD) = '1.4.140'
+          test $(git tag --points-at HEAD) = 'MOBILE-1.4.140'
 
 
   test_case_4:
@@ -144,9 +164,9 @@ jobs:
           # Fetch the list of remote tags and then push a command to delete each of them on the remote repository
           git push origin $(git ls-remote --tags origin | awk '{print ":" $2}')
 
-      - name: Push test tag '1.3.139'
+      - name: Push test tag 'MOBILE-1.3.139'
         run: |
-          git tag '1.3.139'
+          git tag 'MOBILE-1.3.139'
           git push https://${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }} --tags
 
       - name: Commit changes with 'MAJOR' in the message
@@ -155,7 +175,7 @@ jobs:
           git config --local user.email "test@github.com"
           git config --local user.name "GitHub Actions"
           git add .
-          git commit -m "Test Commit for MAJOR version increment"
+          git commit -m "Test Commit for MAJOR MOBILE version increment"
           git pull https://${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }} --rebase
           git push https://${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}
 
@@ -165,9 +185,58 @@ jobs:
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Check if new tag is '2.0.140'
+      - name: Check if new tag is 'MOBILE-2.0.140'
         run: |
           ACTION_OUTPUT=${{ steps.increment_version.outputs.build-version }}
-          test ${ACTION_OUTPUT} = '2.0.140'
+          test ${ACTION_OUTPUT} = 'MOBILE-2.0.140'
           git fetch --tags
-          test $(git tag --points-at HEAD) = '2.0.140'
+          test $(git tag --points-at HEAD) = 'MOBILE-2.0.140'
+
+
+  test_case_5:
+    name: no version increment if the commit message does not contain BACKEND, FRONTEND or MOBILE
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    needs: test_case_4
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Remove all tags
+        run: |
+          # Delete all local tags
+          git fetch --tags
+          git tag -l | xargs git tag -d
+          # Fetch the list of remote tags and then push a command to delete each of them on the remote repository
+          git push origin $(git ls-remote --tags origin | awk '{print ":" $2}')
+
+      - name: Push test tag 'MOBILE-1.3.139'
+        run: |
+          git tag 'MOBILE-1.3.139'
+          git push https://${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }} --tags
+
+      - name: Commit changes without any software module keyword
+        run: |
+          echo "." >> build.txt
+          git config --local user.email "test@github.com"
+          git config --local user.name "GitHub Actions"
+          git add .
+          git commit -m "Test Commit for no increment being required"
+          git pull https://${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }} --rebase
+          git push https://${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}
+
+      - name: Increment Version
+        id: increment_version
+        uses: ./
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Check if new tag is still 'MOBILE-1.3.139'
+        run: |
+          ACTION_OUTPUT=${{ steps.increment_version.outputs.build-version }}
+          test ${ACTION_OUTPUT} = 'MOBILE-1.3.139'
+          git fetch --tags
+          test $(git tag --points-at HEAD) = 'MOBILE-1.3.139'
