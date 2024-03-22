@@ -102,7 +102,7 @@ jobs:
 
       - name: Commit changes with 'MINOR' in the message
         run: |
-          echo "Test Commit for minor version increment" > minor.txt
+          echo "." >> minor.txt
           git config --local user.email "test@github.com"
           git config --local user.name "GitHub Actions"
           git add .
