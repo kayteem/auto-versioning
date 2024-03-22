@@ -1,21 +1,21 @@
 name: 'Increment Version'
-description: 'automatically bumps the version for each software module'
+description: 'automatically bumps the version for the software module specified by the commit message'
 
 inputs:
   token:
     description: 'GITHUB_TOKEN required to create or delete version numbers'
-    required: true # required only when generating the initial build-version
+    required: true # required only when generating the initial version
 
 outputs:
-  build-version:
-    description: "the incremented BUILD version number"
-    value: ${{ steps.increment_build_version.outputs.build_version }}
+  version:
+    description: "the incremented version string"
+    value: ${{ steps.increment_version.outputs.version }}
 
 runs:
   using: "composite"
   steps:
     - name: increment BUILD version and push tag
-      id: increment_build_version
+      id: increment_version
       shell: bash
       run: |
         
