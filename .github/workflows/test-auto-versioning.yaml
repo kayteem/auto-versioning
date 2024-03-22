@@ -107,6 +107,7 @@ jobs:
           git config --local user.name "GitHub Actions"
           git add .
           git commit -m "Test Commit for MINOR version increment"
+          git pull https://${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }} --rebase
           git push https://${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}
 
       - name: Increment Version
@@ -155,6 +156,7 @@ jobs:
           git config --local user.name "GitHub Actions"
           git add .
           git commit -m "Test Commit for MAJOR version increment"
+          git pull https://${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }} --rebase
           git push https://${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}
 
       - name: Increment Version
