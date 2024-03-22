@@ -234,9 +234,12 @@ jobs:
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Check if the action output is empty and the latest tag is still 'MOBILE-1.3.139'
+      - name: Check if the action output is empty
         run: |
           ACTION_OUTPUT="${{ steps.increment_version.outputs.version }}"
           test "${ACTION_OUTPUT}" = ''
+
+      - name: Check if the latest tag is still 'MOBILE-1.3.139'
+        run: |
           git fetch --tags
           test $(git tag --points-at HEAD) = 'MOBILE-1.3.139'
