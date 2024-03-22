@@ -46,7 +46,7 @@ runs:
         
         # If no tag exists, start from 1
         if [ -z "$LATEST_TAG_HASH" ]; then
-          NEW_TAG="${PREFIX}0.0.1”
+          NEW_TAG="${PREFIX}0.0.1"
         
         else
           # Get tag name
